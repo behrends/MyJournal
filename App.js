@@ -2,15 +2,18 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 export default class App extends React.Component {
+  state = { item: null };
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>Keine Einträge im Tagebuch</Text>
+        <Text>{this.state.item || 'Keine Einträge im Tagebuch'}</Text>
         <TextInput
           style={styles.input}
           placeholder="Tagebucheintrag erstellen"
           returnKeyType="done"
-          onSubmitEditing={event => console.log(event.nativeEvent.text)}
+          onSubmitEditing={event =>
+            this.setState({ item: event.nativeEvent.text })}
         />
       </View>
     );
