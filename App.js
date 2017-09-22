@@ -1,10 +1,13 @@
 import React from 'react';
 import {
   KeyboardAvoidingView,
+  Platform,
   SectionList,
   StyleSheet,
   Text,
   TextInput,
+  TouchableNativeFeedback,
+  TouchableOpacity,
   View
 } from 'react-native';
 
@@ -53,13 +56,21 @@ export default class App extends React.Component {
   }
 
   render() {
+    const TouchableItem =
+      Platform.OS === 'ios' ? TouchableOpacity : TouchableNativeFeedback;
     let content = <Text>Keine Einträge im Tagebuch</Text>;
     if (this.state.items.length > 0) {
       content = (
         <SectionList
           style={styles.list}
           sections={this.state.items}
-          renderItem={({ item }) => <Text>{item.text}</Text>}
+          renderItem={({ item }) => (
+            <TouchableItem>
+              <View>
+                <Text>{item.text}</Text>
+              </View>
+            </TouchableItem>
+          )}
           renderSectionHeader={({ section }) => (
             <Text style={styles.listHeader}>{section.title}</Text>
           )}
