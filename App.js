@@ -1,20 +1,54 @@
 import React from 'react';
 import {
-  FlatList,
   KeyboardAvoidingView,
+  SectionList,
   StyleSheet,
   Text,
   TextInput,
   View
 } from 'react-native';
 
+const journalItems = [
+  {
+    data: [
+      {
+        text: 'Umgang mit SectionList in React Native gelernt',
+        date: 1
+      }
+    ],
+    title: '29.7.2017'
+  },
+  {
+    data: [
+      { text: 'Einkauf im Supermarkt', date: 2 },
+      { text: 'Wochenendausflug geplant', date: 3 }
+    ],
+    title: '28.7.2017'
+  }
+];
+
 export default class App extends React.Component {
-  state = { items: [] };
+  state = { items: journalItems };
 
   _addItem(text) {
-    this.setState({
-      items: [...this.state.items, { text, date: Date.now() }]
-    });
+    let { items } = this.state;
+    let [head, ...tail] = items;
+
+    const now = new Date();
+    const day = now.getDate();
+    const month = now.getMonth() + 1;
+    const year = now.getFullYear();
+    const today = `${day}.${month}.${year}`;
+
+    if (head === undefined || head.title !== today) {
+      // ggf. neuer Abschnitt für heutiges Datum
+      head = { data: [], title: today };
+      tail = items;
+    }
+    const newItem = { text: text, date: now.getTime() };
+    head.data = [newItem, ...head.data];
+    items = [head, ...tail];
+    this.setState({ items });
     this.textInput.clear();
   }
 
@@ -22,10 +56,13 @@ export default class App extends React.Component {
     let content = <Text>Keine Einträge im Tagebuch</Text>;
     if (this.state.items.length > 0) {
       content = (
-        <FlatList
+        <SectionList
           style={styles.list}
-          data={this.state.items}
+          sections={this.state.items}
           renderItem={({ item }) => <Text>{item.text}</Text>}
+          renderSectionHeader={({ section }) => (
+            <Text style={styles.listHeader}>{section.title}</Text>
+          )}
           keyExtractor={item => item.date}
         />
       );
@@ -58,5 +95,8 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40
+  },
+  listHeader: {
+    backgroundColor: 'darkgray'
   }
 });
