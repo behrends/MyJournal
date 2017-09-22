@@ -1,5 +1,12 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  FlatList,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View
+} from 'react-native';
 
 export default class App extends React.Component {
   state = { items: [] };
@@ -25,12 +32,15 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         {content}
-        <TextInput
-          style={styles.input}
-          placeholder="Tagebucheintrag erstellen"
-          returnKeyType="done"
-          onSubmitEditing={event => this._addItem(event.nativeEvent.text)}
-        />
+        <KeyboardAvoidingView behavior="padding">
+          <TextInput
+            style={styles.input}
+            placeholder="Tagebucheintrag erstellen"
+            returnKeyType="done"
+            onSubmitEditing={event =>
+              this._addItem(event.nativeEvent.text)}
+          />
+        </KeyboardAvoidingView>
       </View>
     );
   }
