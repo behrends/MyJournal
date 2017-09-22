@@ -1,34 +1,14 @@
 import React from 'react';
 import {
   KeyboardAvoidingView,
-  Platform,
-  SectionList,
   StyleSheet,
   Text,
   TextInput,
-  TouchableNativeFeedback,
-  TouchableOpacity,
   View
 } from 'react-native';
+import JournalItems from './JournalItems';
 
-const journalItems = [
-  {
-    data: [
-      {
-        text: 'Umgang mit SectionList in React Native gelernt',
-        date: 1
-      }
-    ],
-    title: '29.7.2017'
-  },
-  {
-    data: [
-      { text: 'Einkauf im Supermarkt', date: 2 },
-      { text: 'Wochenendausflug geplant', date: 3 }
-    ],
-    title: '28.7.2017'
-  }
-];
+const journalItems = [];
 
 export default class App extends React.Component {
   state = { items: journalItems };
@@ -56,31 +36,9 @@ export default class App extends React.Component {
   }
 
   render() {
-    const TouchableItem =
-      Platform.OS === 'ios' ? TouchableOpacity : TouchableNativeFeedback;
-    let content = <Text>Keine Einträge im Tagebuch</Text>;
-    if (this.state.items.length > 0) {
-      content = (
-        <SectionList
-          style={styles.list}
-          sections={this.state.items}
-          renderItem={({ item }) => (
-            <TouchableItem>
-              <View>
-                <Text>{item.text}</Text>
-              </View>
-            </TouchableItem>
-          )}
-          renderSectionHeader={({ section }) => (
-            <Text style={styles.listHeader}>{section.title}</Text>
-          )}
-          keyExtractor={item => item.date}
-        />
-      );
-    }
     return (
       <View style={styles.container}>
-        {content}
+        <JournalItems items={this.state.items} />
         <KeyboardAvoidingView behavior="padding">
           <TextInput
             style={styles.input}
@@ -101,13 +59,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center'
   },
-  list: {
-    marginTop: 24
-  },
   input: {
     height: 40
-  },
-  listHeader: {
-    backgroundColor: 'darkgray'
   }
 });
