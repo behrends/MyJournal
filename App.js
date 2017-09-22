@@ -15,6 +15,7 @@ export default class App extends React.Component {
     this.setState({
       items: [...this.state.items, { text, date: Date.now() }]
     });
+    this.textInput.clear();
   }
 
   render() {
@@ -35,6 +36,7 @@ export default class App extends React.Component {
         <KeyboardAvoidingView behavior="padding">
           <TextInput
             style={styles.input}
+            ref={input => (this.textInput = input)}
             placeholder="Tagebucheintrag erstellen"
             returnKeyType="done"
             onSubmitEditing={event =>
