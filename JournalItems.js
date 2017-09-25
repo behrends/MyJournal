@@ -36,6 +36,9 @@ export default class JournalItems extends Component {
           <Text style={styles.listHeader}>{section.title}</Text>
         )}
         keyExtractor={item => item.date}
+        ItemSeparatorComponent={() => (
+          <View style={styles.listSeparator} />
+        )}
       />
     );
   }
@@ -56,6 +59,12 @@ const styles = StyleSheet.create({
     marginTop: 24
   },
   listHeader: {
-    backgroundColor: 'darkgray'
+    color: 'gray',
+    backgroundColor: 'lightcyan',
+    textAlign: 'center'
+  },
+  listSeparator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: 'lightblue'
   }
 });
