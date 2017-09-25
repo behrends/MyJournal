@@ -17,7 +17,7 @@ export default class JournalItems extends Component {
     if (this.props.items.length === 0)
       return (
         <View style={styles.noItems}>
-          <Text>Keine Einträge im Tagebuch</Text>
+          <Text style={styles.infoText}>Keine Einträge im Tagebuch</Text>
         </View>
       );
 
@@ -42,6 +42,11 @@ export default class JournalItems extends Component {
 }
 
 const styles = StyleSheet.create({
+  infoText: {
+    color: 'darkslategray',
+    fontSize: 22,
+    fontWeight: '300'
+  },
   noItems: {
     flex: 1,
     alignItems: 'center',
