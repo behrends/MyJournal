@@ -40,14 +40,17 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <JournalItems items={this.state.items} />
         <KeyboardAvoidingView behavior="padding">
-          <TextInput
-            style={styles.input}
-            ref={input => (this.textInput = input)}
-            placeholder="Tagebucheintrag erstellen"
-            returnKeyType="done"
-            onSubmitEditing={event =>
-              this._addItem(event.nativeEvent.text)}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              ref={input => (this.textInput = input)}
+              underlineColorAndroid="transparent"
+              placeholder="Tagebucheintrag erstellen"
+              returnKeyType="done"
+              onSubmitEditing={event =>
+                this._addItem(event.nativeEvent.text)}
+            />
+          </View>
         </KeyboardAvoidingView>
       </View>
     );
@@ -60,5 +63,10 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40
+  },
+  inputContainer: {
+    borderColor: 'deepskyblue',
+    borderRadius: 8,
+    borderWidth: 1
   }
 });
