@@ -15,7 +15,11 @@ const TouchableItem =
 export default class JournalItems extends Component {
   render() {
     if (this.props.items.length === 0)
-      return <Text>Keine Einträge im Tagebuch</Text>;
+      return (
+        <View style={styles.noItems}>
+          <Text>Keine Einträge im Tagebuch</Text>
+        </View>
+      );
 
     return (
       <SectionList
@@ -38,6 +42,11 @@ export default class JournalItems extends Component {
 }
 
 const styles = StyleSheet.create({
+  noItems: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   list: {
     marginTop: 24
   },
