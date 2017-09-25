@@ -6,7 +6,7 @@ import {
   TextInput,
   View
 } from 'react-native';
-import JournalItems from './JournalItems';
+import JournalItems from './js/components/JournalItems';
 
 const journalItems = [];
 
