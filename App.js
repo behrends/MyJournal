@@ -67,6 +67,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     borderColor: 'deepskyblue',
     borderRadius: 8,
-    borderWidth: 1
+    borderWidth: 1,
+    margin: 5,
+    paddingHorizontal: 5
   }
 });
