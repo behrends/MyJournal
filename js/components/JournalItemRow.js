@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  View
-} from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
-const TouchableItem =
-  Platform.OS === 'ios' ? TouchableOpacity : TouchableNativeFeedback;
+import TouchableItem from './TouchableItem';
 
 export default class JournalItemRow extends Component {
   render() {
