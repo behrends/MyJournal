@@ -1,16 +1,12 @@
-import React from 'react';
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View
-} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+
 import JournalItems from './js/components/JournalItems';
+import JournalItemInput from './js/components/JournalItemInput';
 
 const journalItems = [];
 
-export default class App extends React.Component {
+export default class App extends Component {
   state = { items: journalItems };
 
   _addItem(text) {
@@ -32,26 +28,13 @@ export default class App extends React.Component {
     head.data = [newItem, ...head.data];
     items = [head, ...tail];
     this.setState({ items });
-    this.textInput.clear();
   }
 
   render() {
     return (
       <View style={styles.container}>
         <JournalItems items={this.state.items} />
-        <KeyboardAvoidingView behavior="padding">
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              ref={input => (this.textInput = input)}
-              underlineColorAndroid="transparent"
-              placeholder="Tagebucheintrag erstellen"
-              returnKeyType="done"
-              onSubmitEditing={event =>
-                this._addItem(event.nativeEvent.text)}
-            />
-          </View>
-        </KeyboardAvoidingView>
+        <JournalItemInput onSubmit={text => this._addItem(text)} />
       </View>
     );
   }
@@ -60,15 +43,5 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  },
-  input: {
-    height: 40
-  },
-  inputContainer: {
-    borderColor: 'deepskyblue',
-    borderRadius: 8,
-    borderWidth: 1,
-    margin: 5,
-    paddingHorizontal: 5
   }
 });
