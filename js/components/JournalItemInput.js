@@ -6,10 +6,16 @@ import {
   View
 } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
+import { ImagePicker } from 'expo';
 
 import TouchableItem from './TouchableItem';
 
 export default class JournalItemInput extends Component {
+  _launchCamera = async () => {
+    const result = await ImagePicker.launchCameraAsync();
+    console.log(result);
+  };
+
   _submit(text) {
     this.textInput.clear();
     this.props.onSubmit(text);
@@ -20,7 +26,7 @@ export default class JournalItemInput extends Component {
       <KeyboardAvoidingView behavior="padding">
         <View style={styles.inputContainer}>
           <View style={styles.photoIcon}>
-            <TouchableItem>
+            <TouchableItem onPress={() => this._launchCamera()}>
               <SimpleLineIcons
                 name="camera"
                 size={24}
