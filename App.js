@@ -9,7 +9,7 @@ const journalItems = [];
 export default class App extends Component {
   state = { items: journalItems };
 
-  _addItem(text) {
+  _addItem(text, photo) {
     let { items } = this.state;
     let [head, ...tail] = items;
 
@@ -24,7 +24,7 @@ export default class App extends Component {
       head = { data: [], title: today };
       tail = items;
     }
-    const newItem = { text: text, date: now.getTime() };
+    const newItem = { text: text, photo: photo, date: now.getTime() };
     head.data = [newItem, ...head.data];
     items = [head, ...tail];
     this.setState({ items });
@@ -34,7 +34,9 @@ export default class App extends Component {
     return (
       <View style={styles.container}>
         <JournalItems items={this.state.items} />
-        <JournalItemInput onSubmit={text => this._addItem(text)} />
+        <JournalItemInput
+          onSubmit={(text, photo) => this._addItem(text, photo)}
+        />
       </View>
     );
   }

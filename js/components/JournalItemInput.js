@@ -24,7 +24,8 @@ export default class JournalItemInput extends Component {
 
   _submit(text) {
     this.textInput.clear();
-    this.props.onSubmit(text);
+    this.props.onSubmit(text, this.state.photo);
+    this.setState({ photo: null });
   }
 
   render() {
