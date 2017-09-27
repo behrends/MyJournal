@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Image,
   KeyboardAvoidingView,
   StyleSheet,
   TextInput,
@@ -11,9 +12,14 @@ import { ImagePicker } from 'expo';
 import TouchableItem from './TouchableItem';
 
 export default class JournalItemInput extends Component {
+  state = { photo: null };
+
   _launchCamera = async () => {
     const result = await ImagePicker.launchCameraAsync();
-    console.log(result);
+    if (!result.cancelled) {
+      this.setState({ photo: result.uri });
+      this.textInput.focus();
+    }
   };
 
   _submit(text) {
@@ -22,16 +28,20 @@ export default class JournalItemInput extends Component {
   }
 
   render() {
+    const photoIcon = this.state.photo ? (
+      <Image
+        style={styles.imagePreview}
+        source={{ uri: this.state.photo }}
+      />
+    ) : (
+      <SimpleLineIcons name="camera" size={24} color="deepskyblue" />
+    );
     return (
       <KeyboardAvoidingView behavior="padding">
         <View style={styles.inputContainer}>
           <View style={styles.photoIcon}>
             <TouchableItem onPress={() => this._launchCamera()}>
-              <SimpleLineIcons
-                name="camera"
-                size={24}
-                color="deepskyblue"
-              />
+              {photoIcon}
             </TouchableItem>
           </View>
           <TextInput
@@ -65,5 +75,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginLeft: 5,
     marginRight: 15
+  },
+  imagePreview: {
+    width: 24,
+    height: 24
   }
 });
