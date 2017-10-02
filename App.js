@@ -63,6 +63,7 @@ export default class App extends Component {
         <JournalItems items={sections} />
         <JournalItemInput
           onSubmit={(text, photo) => this._addItem(text, photo)}
+          refresh={() => this.setState({ items: [] })}
         />
       </View>
     );

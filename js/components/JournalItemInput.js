@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   StyleSheet,
@@ -10,9 +11,30 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 import { ImagePicker } from 'expo';
 
 import TouchableItem from './TouchableItem';
+import Store from '../Store';
 
 export default class JournalItemInput extends Component {
   state = { photo: null };
+
+  _deleteItems() {
+    Alert.alert(
+      'Einträge löschen',
+      'Sollen wirklich alle Einträge gelöscht werden?',
+      [
+        {
+          text: 'Nein',
+          style: 'cancel'
+        },
+        {
+          text: 'Ja',
+          onPress: async () => {
+            await Store.deleteItems();
+            this.props.refresh();
+          }
+        }
+      ]
+    );
+  }
 
   _launchCamera = async () => {
     const result = await ImagePicker.launchCameraAsync();
@@ -39,20 +61,32 @@ export default class JournalItemInput extends Component {
     );
     return (
       <KeyboardAvoidingView behavior="padding">
-        <View style={styles.inputContainer}>
-          <View style={styles.photoIcon}>
-            <TouchableItem onPress={() => this._launchCamera()}>
-              {photoIcon}
-            </TouchableItem>
+        <View style={styles.container}>
+          <View style={styles.inputContainer}>
+            <View style={styles.photoIcon}>
+              <TouchableItem onPress={() => this._launchCamera()}>
+                {photoIcon}
+              </TouchableItem>
+            </View>
+            <TextInput
+              style={styles.input}
+              ref={input => (this.textInput = input)}
+              placeholder="Tagebucheintrag erstellen"
+              returnKeyType="done"
+              underlineColorAndroid="transparent"
+              onSubmitEditing={event =>
+                this._submit(event.nativeEvent.text)}
+            />
           </View>
-          <TextInput
-            style={styles.input}
-            ref={input => (this.textInput = input)}
-            placeholder="Tagebucheintrag erstellen"
-            returnKeyType="done"
-            underlineColorAndroid="transparent"
-            onSubmitEditing={event => this._submit(event.nativeEvent.text)}
-          />
+          <TouchableItem onPress={() => this._deleteItems()}>
+            <View>
+              <SimpleLineIcons
+                name="trash"
+                size={24}
+                color="deepskyblue"
+              />
+            </View>
+          </TouchableItem>
         </View>
       </KeyboardAvoidingView>
     );
@@ -60,7 +94,12 @@ export default class JournalItemInput extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
   inputContainer: {
+    flex: 1,
     flexDirection: 'row',
     borderColor: 'deepskyblue',
     borderRadius: 8,
