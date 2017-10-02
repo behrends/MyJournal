@@ -8,7 +8,7 @@ import {
   View
 } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
-import { ImagePicker } from 'expo';
+import { ImagePicker, Location, Permissions } from 'expo';
 
 import TouchableItem from './TouchableItem';
 import Store from '../Store';
@@ -46,15 +46,28 @@ export default class JournalItemInput extends Component {
 
   _getWeather = async () => {
     let result = { location: null, weather: null };
-    const location = 'Freiburg';
-    const url =
-      'https://www.behrends.io/react-native-buch/Kapitel7/weather.json';
     try {
+      const { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+        return result;
+      }
+
+      const position = await Location.getCurrentPositionAsync({});
+      const { longitude, latitude } = position.coords;
+      const location = `lon=${longitude}&lat=${latitude}`;
+      const apiKey = 'APPID='; // OpenWeatherMap API-Key einsetzen
+      const url =
+        'http://api.openweathermap.org/data/2.5/weather?' +
+        location +
+        '&' +
+        apiKey +
+        '&units=metric&lang=de';
       const response = await fetch(url);
       const weatherJSON = await response.json();
-      const { weather, main } = weatherJSON[location];
+      const { weather, main, name } = weatherJSON;
       result = {
-        location: location,
+        location: name,
         weather: `${Math.floor(main.temp)}˚C ${weather[0].description}`
       };
     } catch (error) {
