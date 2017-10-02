@@ -44,9 +44,33 @@ export default class JournalItemInput extends Component {
     }
   };
 
+  _getWeather = async () => {
+    let result = { location: null, weather: null };
+    const location = 'Freiburg';
+    const url =
+      'https://www.behrends.io/react-native-buch/Kapitel7/weather.json';
+    try {
+      const response = await fetch(url);
+      const weatherJSON = await response.json();
+      const { weather, main } = weatherJSON[location];
+      result = {
+        location: location,
+        weather: `${Math.floor(main.temp)}˚C ${weather[0].description}`
+      };
+    } catch (error) {
+      console.log('Error fetching weather', error);
+    }
+    return result;
+  };
+
+  _submitWithWeather = async (text, photo) => {
+    const { location, weather } = await this._getWeather();
+    this.props.onSubmit({ text, photo, location, weather });
+  };
+
   _submit(text) {
     this.textInput.clear();
-    this.props.onSubmit(text, this.state.photo);
+    this._submitWithWeather(text, this.state.photo);
     this.setState({ photo: null });
   }
 

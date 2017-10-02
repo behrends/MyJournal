@@ -47,11 +47,11 @@ export default class App extends Component {
     return sections;
   }
 
-  _addItem(text, photo) {
+  _addItem(item) {
     let { items } = this.state;
     // Neuen Eintrag am Anfang der Liste eintragen und speichern
-    const newItem = { text, photo, date: new Date().getTime() };
-    items = [newItem, ...items];
+    item.date = new Date().getTime();
+    items = [item, ...items];
     this.setState({ items: items });
     Store.saveItems(items);
   }
@@ -62,7 +62,7 @@ export default class App extends Component {
       <View style={styles.container}>
         <JournalItems items={sections} />
         <JournalItemInput
-          onSubmit={(text, photo) => this._addItem(text, photo)}
+          onSubmit={item => this._addItem(item)}
           refresh={() => this.setState({ items: [] })}
         />
       </View>
