@@ -4,36 +4,63 @@ import { StyleSheet, View } from 'react-native';
 import JournalItems from './js/components/JournalItems';
 import JournalItemInput from './js/components/JournalItemInput';
 
-const journalItems = [];
+import Store from './js/Store';
 
 export default class App extends Component {
-  state = { items: journalItems };
+  state = { items: [] };
+
+  componentWillMount() {
+    this._refreshItems();
+  }
+
+  _refreshItems = async () => {
+    const items = await Store.loadItems();
+    this.setState({ items });
+  };
+
+  _getSectionTitleFromDate(date) {
+    const dateObj = new Date(date);
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1;
+    const year = dateObj.getFullYear();
+    return `${day}.${month}.${year}`;
+  }
+
+  _getItemsWithSections(items) {
+    if (items.length === 0) return [];
+
+    // Datenstruktur für Sections mit Eintrag initialisieren
+    let sectionTitle = this._getSectionTitleFromDate(items[0].date);
+    let sections = [{ data: [], title: sectionTitle }];
+    items.forEach(item => {
+      sectionTitle = this._getSectionTitleFromDate(item.date);
+      let lastSection = sections[sections.length - 1];
+
+      // trage item in section data ein, falls item am gleichen Tag
+      if (lastSection.title == sectionTitle) {
+        lastSection.data.push(item);
+      } else {
+        // neue Section anhängen, falls item an anderem Tag
+        sections.push({ data: [item], title: sectionTitle });
+      }
+    });
+    return sections;
+  }
 
   _addItem(text, photo) {
     let { items } = this.state;
-    let [head, ...tail] = items;
-
-    const now = new Date();
-    const day = now.getDate();
-    const month = now.getMonth() + 1;
-    const year = now.getFullYear();
-    const today = `${day}.${month}.${year}`;
-
-    if (head === undefined || head.title !== today) {
-      // ggf. neuer Abschnitt für heutiges Datum
-      head = { data: [], title: today };
-      tail = items;
-    }
-    const newItem = { text: text, photo: photo, date: now.getTime() };
-    head.data = [newItem, ...head.data];
-    items = [head, ...tail];
-    this.setState({ items });
+    // Neuen Eintrag am Anfang der Liste eintragen und speichern
+    const newItem = { text, photo, date: new Date().getTime() };
+    items = [newItem, ...items];
+    this.setState({ items: items });
+    Store.saveItems(items);
   }
 
   render() {
+    const sections = this._getItemsWithSections(this.state.items);
     return (
       <View style={styles.container}>
-        <JournalItems items={this.state.items} />
+        <JournalItems items={sections} />
         <JournalItemInput
           onSubmit={(text, photo) => this._addItem(text, photo)}
         />
