@@ -1,12 +1,13 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { TabNavigator } from 'react-navigation';
+import { StackNavigator, TabNavigator } from 'react-navigation';
 
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 import JournalScreen from './screens/JournalScreen';
 import PhotosScreen from './screens/PhotosScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import ItemScreen from './screens/ItemScreen';
 
 const Tabs = TabNavigator(
   {
@@ -59,4 +60,13 @@ const Tabs = TabNavigator(
   }
 );
 
-export default Tabs;
+const AppNavigator = StackNavigator({
+  Root: {
+    screen: Tabs
+  },
+  Item: {
+    screen: ItemScreen
+  }
+});
+
+export default AppNavigator;

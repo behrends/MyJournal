@@ -97,7 +97,7 @@ export default class JournalItemInput extends Component {
       <SimpleLineIcons name="camera" size={24} color="deepskyblue" />
     );
     return (
-      <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView keyboardVerticalOffset={64} behavior="padding">
         <View style={styles.container}>
           <View style={styles.inputContainer}>
             <View style={styles.photoIcon}>

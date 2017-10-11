@@ -16,7 +16,7 @@ export default class JournalItemRow extends Component {
     ) : null;
 
     return (
-      <TouchableItem>
+      <TouchableItem onPress={this.props.onPress}>
         <View style={styles.container}>
           {photo}
           <View style={styles.itemText}>

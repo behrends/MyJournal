@@ -16,7 +16,9 @@ export default class JournalItems extends Component {
       <SectionList
         style={styles.list}
         sections={this.props.items}
-        renderItem={({ item }) => <JournalItemRow item={item} />}
+        renderItem={({ item }) => (
+          <JournalItemRow item={item} onPress={this.props.onPress} />
+        )}
         renderSectionHeader={({ section }) => (
           <Text style={styles.listHeader}>{section.title}</Text>
         )}
