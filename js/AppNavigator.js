@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 
 import { SimpleLineIcons } from '@expo/vector-icons';
@@ -60,13 +60,29 @@ const Tabs = TabNavigator(
   }
 );
 
-const AppNavigator = StackNavigator({
-  Root: {
-    screen: Tabs
+const AppNavigator = StackNavigator(
+  {
+    Root: {
+      screen: Tabs
+    },
+    Item: {
+      screen: ItemScreen
+    }
   },
-  Item: {
-    screen: ItemScreen
+  {
+    navigationOptions: {
+      headerTintColor: 'deepskyblue',
+      headerStyle: {
+        ...Platform.select({
+          android: { marginTop: StatusBar.currentHeight },
+          ios: { backgroundColor: 'white' }
+        })
+      }
+    },
+    cardStyle: {
+      backgroundColor: 'white'
+    }
   }
-});
+);
 
 export default AppNavigator;
