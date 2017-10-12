@@ -8,15 +8,24 @@ import {
   View
 } from 'react-native';
 
+import TouchableItem from '../components/TouchableItem';
+
 export default class PhotosScreen extends Component {
   _getPhotos(items) {
     return items.map(item => (
-      <Image
-        style={styles.photo}
-        source={{ uri: item.photo }}
-        resizeMode="cover"
+      <TouchableItem
         key={item.date}
-      />
+        onPress={() =>
+          this.props.navigation.navigate('Item', { item: item })}
+      >
+        <View>
+          <Image
+            style={styles.photo}
+            source={{ uri: item.photo }}
+            resizeMode="cover"
+          />
+        </View>
+      </TouchableItem>
     ));
   }
 
