@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import JournalItems from '../components/JournalItems';
-import JournalItemInput from '../components/JournalItemInput';
 
 export default class JournalScreen extends Component {
   _getSectionTitleFromDate(date) {
@@ -40,7 +39,6 @@ export default class JournalScreen extends Component {
           items={sections}
           onPress={item => navigate('Item', { item: item })}
         />
-        <JournalItemInput onSubmit={onSubmit} refresh={refresh} />
       </View>
     );
   }
