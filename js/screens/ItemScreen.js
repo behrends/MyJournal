@@ -4,10 +4,28 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  Text
+  Text,
+  View
 } from 'react-native';
 
+import TouchableItem from '../components/TouchableItem';
+
 export default class ItemScreen extends Component {
+  static navigationOptions = ({ navigation }) => {
+    const { navigate, state } = navigation;
+    return {
+      headerRight: (
+        <TouchableItem
+          onPress={() =>
+            navigation.navigate('Edit', { item: state.params.item })}
+        >
+          <View>
+            <Text style={styles.headerAction}>Bearbeiten</Text>
+          </View>
+        </TouchableItem>
+      )
+    };
+  };
   render() {
     // item wird durch navigate() an diesen Screen geliefert
     const item = this.props.navigation.state.params.item;
@@ -31,6 +49,10 @@ export default class ItemScreen extends Component {
 const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  headerAction: {
+    padding: 10,
+    color: 'deepskyblue'
+  },
   photo: {
     width: width,
     height: width

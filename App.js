@@ -17,8 +17,15 @@ export default class App extends Component {
 
   _addItem(item) {
     let { items } = this.state;
-    item.date = new Date().getTime();
-    items = [item, ...items];
+    if (item.date === null) {
+      // Neuer Eintrag am Anfang der Liste eintragen und speichern
+      item.date = new Date().getTime();
+      items = [item, ...items];
+    } else {
+      // Bestehenden Eintrag in Liste aktualisieren
+      const index = items.findIndex(i => i.date === item.date);
+      items[index] = item;
+    }
     this.setState({ items: items });
     Store.saveItems(items);
   }
