@@ -31,14 +31,15 @@ export default class JournalScreen extends Component {
   }
 
   render() {
-    // Funktion navigate wird aus den Navigations-Props ausgelesen
     const { navigate } = this.props.navigation;
     const { items, refresh, onSubmit } = this.props.screenProps;
     const sections = this._getItemsWithSections(items);
-    // JournalItems.onPress erhält Callback mit navigate('Item')
     return (
       <View style={styles.container}>
-        <JournalItems items={sections} onPress={() => navigate('Item')} />
+        <JournalItems
+          items={sections}
+          onPress={item => navigate('Item', { item: item })}
+        />
         <JournalItemInput onSubmit={onSubmit} refresh={refresh} />
       </View>
     );

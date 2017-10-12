@@ -1,19 +1,42 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text
+} from 'react-native';
 
 export default class ItemScreen extends Component {
   render() {
-    const item = { text: 'Ein Tagebucheintrag...' };
+    // item wird durch navigate() an diesen Screen geliefert
+    const item = this.props.navigation.state.params.item;
+    const photo = item.photo ? (
+      <Image
+        style={styles.photo}
+        source={{ uri: item.photo }}
+        resizeMode="cover"
+      />
+    ) : null;
+
     return (
-      <View style={styles.container}>
-        <Text>{item.text}</Text>
-      </View>
+      <ScrollView>
+        {photo}
+        <Text style={styles.text}>{item.text}</Text>
+      </ScrollView>
     );
   }
 }
 
+const { width } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
+  photo: {
+    width: width,
+    height: width
+  },
+  text: {
+    fontSize: 16,
+    padding: 15
   }
 });
