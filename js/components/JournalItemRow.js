@@ -16,8 +16,10 @@ import TouchableItem from './TouchableItem';
 const WINDOW_WIDTH = Dimensions.get('window').width;
 
 export default class JournalItemRow extends Component {
-  // Animated.Value verwenden
-  state = { animSwipe: new Animated.Value(0) };
+  state = {
+    animSwipe: new Animated.Value(0),
+    animHeight: new Animated.Value(75)
+  };
 
   _cancelSwiping() {
     Animated.spring(this.state.animSwipe, { toValue: 0 }).start();
@@ -33,11 +35,16 @@ export default class JournalItemRow extends Component {
       },
       onPanResponderRelease: (evt, gestureState) => {
         if (gestureState.dx < -(WINDOW_WIDTH / 3)) {
-          Animated.spring(this.state.animSwipe, {
-            toValue: -WINDOW_WIDTH,
-            speed: 100
-          }).start();
-          // hier muss der Eintrag gelöscht werden
+          Animated.sequence([
+            Animated.spring(this.state.animSwipe, {
+              toValue: -WINDOW_WIDTH,
+              speed: 100
+            }),
+            Animated.timing(this.state.animHeight, {
+              toValue: 0,
+              duration: 50
+            })
+          ]).start(() => this.props.deleteItem());
         } else {
           this._cancelSwiping();
         }
@@ -60,9 +67,9 @@ export default class JournalItemRow extends Component {
     ) : null;
 
     return (
-      <View
+      <Animated.View
         {...this._panResponder.panHandlers}
-        style={styles.panContainer}
+        style={[{ height: this.state.animHeight }, styles.panContainer]}
       >
         <TouchableItem
           onPress={this.props.onPress}
@@ -96,7 +103,7 @@ export default class JournalItemRow extends Component {
             style={{ paddingLeft: 20 }}
           />
         </Animated.View>
-      </View>
+      </Animated.View>
     );
   }
 }

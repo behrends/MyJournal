@@ -30,13 +30,23 @@ export default class App extends Component {
     Store.saveItems(items);
   }
 
+  _deleteItem(item) {
+    let { items } = this.state;
+    const index = items.findIndex(i => i.date === item.date);
+    // Eintrag aus Liste entfernen
+    items.splice(index, 1);
+    this.setState({ items: items });
+    Store.saveItems(items);
+  }
+
   render() {
     return (
       <AppNavigator
         screenProps={{
           items: this.state.items,
           refresh: this._refreshItems,
-          onSubmit: item => this._addItem(item)
+          onSubmit: item => this._addItem(item),
+          deleteItem: item => this._deleteItem(item)
         }}
       />
     );

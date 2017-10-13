@@ -20,6 +20,7 @@ export default class JournalItems extends Component {
           <JournalItemRow
             item={item}
             onPress={() => this.props.onPress(item)}
+            deleteItem={() => this.props.deleteItem(item)}
           />
         )}
         renderSectionHeader={({ section }) => (
