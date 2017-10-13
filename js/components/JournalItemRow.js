@@ -1,9 +1,40 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import {
+  Dimensions,
+  Image,
+  PanResponder,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
 
 import TouchableItem from './TouchableItem';
 
 export default class JournalItemRow extends Component {
+  state = { backgroundColor: 'transparent' };
+
+  componentWillMount() {
+    this._panResponder = PanResponder.create({
+      onMoveShouldSetPanResponder: (evt, gestureState) => true,
+      onPanResponderGrant: (evt, gestureState) => {
+        this.setState({ backgroundColor: 'yellow' });
+      },
+      onPanResponderMove: (evt, gestureState) => {
+        if (gestureState.dx < -(Dimensions.get('window').width / 3)) {
+          this.setState({ backgroundColor: 'red' });
+        } else {
+          this.setState({ backgroundColor: 'yellow' });
+        }
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        this.setState({ backgroundColor: 'transparent' });
+      },
+      onPanResponderTerminate: (evt, gestureState) => {
+        this.setState({ backgroundColor: 'transparent' });
+      }
+    });
+  }
+
   render() {
     const { item } = this.props;
     const { text, location, weather } = item;
@@ -16,17 +47,24 @@ export default class JournalItemRow extends Component {
     ) : null;
 
     return (
-      <TouchableItem onPress={this.props.onPress}>
-        <View style={styles.container}>
-          {photo}
-          <View style={styles.itemText}>
-            <Text numberOfLines={3}>{text}</Text>
-            <Text style={styles.time}>
-              {`${location || ''}  ${weather || ''}    ${time}`}
-            </Text>
+      <View {...this._panResponder.panHandlers}>
+        <TouchableItem onPress={this.props.onPress}>
+          <View
+            style={[
+              styles.container,
+              { backgroundColor: this.state.backgroundColor }
+            ]}
+          >
+            {photo}
+            <View style={styles.itemText}>
+              <Text numberOfLines={3}>{text}</Text>
+              <Text style={styles.time}>
+                {`${location || ''}  ${weather || ''}    ${time}`}
+              </Text>
+            </View>
           </View>
-        </View>
-      </TouchableItem>
+        </TouchableItem>
+      </View>
     );
   }
 }

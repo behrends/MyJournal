@@ -14,6 +14,7 @@ export default class JournalItems extends Component {
 
     return (
       <SectionList
+        bounces={false}
         sections={this.props.items}
         renderItem={({ item }) => (
           <JournalItemRow
