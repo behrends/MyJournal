@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Animated,
   Dimensions,
   Image,
   PanResponder,
@@ -8,29 +9,41 @@ import {
   View
 } from 'react-native';
 
+import { SimpleLineIcons } from '@expo/vector-icons';
+
 import TouchableItem from './TouchableItem';
 
+const WINDOW_WIDTH = Dimensions.get('window').width;
+
 export default class JournalItemRow extends Component {
-  state = { backgroundColor: 'transparent' };
+  // Animated.Value verwenden
+  state = { animSwipe: new Animated.Value(0) };
+
+  _cancelSwiping() {
+    Animated.spring(this.state.animSwipe, { toValue: 0 }).start();
+  }
 
   componentWillMount() {
     this._panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onPanResponderGrant: (evt, gestureState) => {
-        this.setState({ backgroundColor: 'yellow' });
-      },
       onPanResponderMove: (evt, gestureState) => {
-        if (gestureState.dx < -(Dimensions.get('window').width / 3)) {
-          this.setState({ backgroundColor: 'red' });
-        } else {
-          this.setState({ backgroundColor: 'yellow' });
+        if (gestureState.dx < 5) {
+          this.state.animSwipe.setValue(gestureState.dx);
         }
       },
       onPanResponderRelease: (evt, gestureState) => {
-        this.setState({ backgroundColor: 'transparent' });
+        if (gestureState.dx < -(WINDOW_WIDTH / 3)) {
+          Animated.spring(this.state.animSwipe, {
+            toValue: -WINDOW_WIDTH,
+            speed: 100
+          }).start();
+          // hier muss der Eintrag gelöscht werden
+        } else {
+          this._cancelSwiping();
+        }
       },
       onPanResponderTerminate: (evt, gestureState) => {
-        this.setState({ backgroundColor: 'transparent' });
+        this._cancelSwiping();
       }
     });
   }
@@ -47,12 +60,18 @@ export default class JournalItemRow extends Component {
     ) : null;
 
     return (
-      <View {...this._panResponder.panHandlers}>
-        <TouchableItem onPress={this.props.onPress}>
-          <View
+      <View
+        {...this._panResponder.panHandlers}
+        style={styles.panContainer}
+      >
+        <TouchableItem
+          onPress={this.props.onPress}
+          style={styles.touchableRow}
+        >
+          <Animated.View
             style={[
-              styles.container,
-              { backgroundColor: this.state.backgroundColor }
+              { transform: [{ translateX: this.state.animSwipe }] },
+              styles.container
             ]}
           >
             {photo}
@@ -62,14 +81,39 @@ export default class JournalItemRow extends Component {
                 {`${location || ''}  ${weather || ''}    ${time}`}
               </Text>
             </View>
-          </View>
+          </Animated.View>
         </TouchableItem>
+        <Animated.View
+          style={[
+            { transform: [{ translateX: this.state.animSwipe }] },
+            styles.delete
+          ]}
+        >
+          <SimpleLineIcons
+            name="trash"
+            size={24}
+            color="white"
+            style={{ paddingLeft: 20 }}
+          />
+        </Animated.View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  panContainer: {
+    flexDirection: 'row'
+  },
+  touchableRow: {
+    flex: 1
+  },
+  delete: {
+    justifyContent: 'center',
+    backgroundColor: 'orangered',
+    width: WINDOW_WIDTH,
+    marginRight: -WINDOW_WIDTH
+  },
   container: {
     flex: 1,
     flexDirection: 'row',
