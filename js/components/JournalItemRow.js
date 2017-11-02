@@ -23,11 +23,13 @@ export default class JournalItemRow extends Component {
 
   _cancelSwiping() {
     Animated.spring(this.state.animSwipe, { toValue: 0 }).start();
+    this.props.toggleScrolling(true);
   }
 
   componentWillMount() {
     this._panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
+      onPanResponderGrant: () => this.props.toggleScrolling(false),
       onPanResponderMove: (evt, gestureState) => {
         if (gestureState.dx < 5) {
           this.state.animSwipe.setValue(gestureState.dx);

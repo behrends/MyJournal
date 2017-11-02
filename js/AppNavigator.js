@@ -58,7 +58,8 @@ const Tabs = TabNavigator(
         // nur Android: kein Abstand nach unten
         ...Platform.select({ android: { marginBottom: 0 } })
       }
-    }
+    },
+    swipeEnabled: false
   }
 );
 

@@ -4,6 +4,8 @@ import { SectionList, StyleSheet, Text, View } from 'react-native';
 import JournalItemRow from './JournalItemRow';
 
 export default class JournalItems extends Component {
+  state = { scrollEnabled: true };
+
   render() {
     if (this.props.items.length === 0)
       return (
@@ -16,11 +18,14 @@ export default class JournalItems extends Component {
       <SectionList
         bounces={false}
         sections={this.props.items}
+        scrollEnabled={this.state.scrollEnabled}
         renderItem={({ item }) => (
           <JournalItemRow
             item={item}
             onPress={() => this.props.onPress(item)}
             deleteItem={() => this.props.deleteItem(item)}
+            toggleScrolling={flag =>
+              this.setState({ scrollEnabled: flag })}
           />
         )}
         renderSectionHeader={({ section }) => (
