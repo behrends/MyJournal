@@ -4700,7 +4700,7 @@ react-native@^0.51.0:
     xmldoc "^0.4.0"
     yargs "^9.0.0"
 
-react-navigation@^1.0.0-beta.21:
+react-navigation@^1.0.0-beta.23:
   version "1.0.0-beta.23"
   resolved "https://registry.yarnpkg.com/react-navigation/-/react-navigation-1.0.0-beta.23.tgz#e666c4985e80d1ba39662838b78ad681c07cc187"
   dependencies:
