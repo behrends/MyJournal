@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StatusBar, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 
 import { SimpleLineIcons } from '@expo/vector-icons';
@@ -99,7 +99,6 @@ const AppNavigator = StackNavigator(
       headerTintColor: 'deepskyblue',
       headerStyle: {
         ...Platform.select({
-          android: { marginTop: StatusBar.currentHeight },
           ios: { backgroundColor: 'white' }
         })
       }
