@@ -30,20 +30,37 @@ export default class EditScreen extends Component {
       const weatherJSON = await response.json();
       const { weather, main, name } = weatherJSON;
       item.location = name;
-      item.weather = `${Math.floor(main.temp)}˚C ${weather[0]
-        .description}`;
+      item.weather = `${Math.floor(main.temp)}˚C ${
+        weather[0].description
+      }`;
       this.setState({ item: item });
     } catch (error) {
       console.log('Error fetching weather', error);
     }
   };
 
+  _hasCameraPermissions = async () => {
+    let permission = await Permissions.askAsync(Permissions.CAMERA);
+    if (permission.status !== 'granted') {
+      console.log('Permission to camera was denied');
+      return false;
+    }
+    permission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (permission.status !== 'granted') {
+      console.log('Permission to camera roll was denied');
+      return false;
+    }
+    return true;
+  };
+
   _launchCamera = async () => {
-    const result = await ImagePicker.launchCameraAsync();
-    if (!result.cancelled) {
-      const { item } = this.state;
-      item.photo = result.uri;
-      this.setState({ item: item });
+    if (this._hasCameraPermissions()) {
+      const result = await ImagePicker.launchCameraAsync();
+      if (!result.cancelled) {
+        const { item } = this.state;
+        item.photo = result.uri;
+        this.setState({ item: item });
+      }
     }
     this.textInput.focus();
   };
