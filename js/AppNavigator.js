@@ -19,56 +19,44 @@ const Tabs = createBottomTabNavigator(
     Journal: {
       screen: JournalScreen,
       navigationOptions: {
-        title: 'Tagebuch',
-        tabBarIcon: ({ tintColor }) => (
-          <SimpleLineIcons name="book-open" size={24} color={tintColor} />
-        )
+        title: 'Tagebuch'
       }
     },
     Photos: {
       screen: PhotosScreen,
       navigationOptions: {
-        title: 'Fotos',
-        tabBarIcon: ({ tintColor }) => (
-          <SimpleLineIcons name="picture" size={24} color={tintColor} />
-        )
+        title: 'Fotos'
       }
     },
     Settings: {
       screen: SettingsScreen,
       navigationOptions: {
-        title: 'Einstellungen',
-        tabBarIcon: ({ tintColor }) => (
-          <SimpleLineIcons name="settings" size={24} color={tintColor} />
-        )
+        title: 'Einstellungen'
       }
     }
   },
   {
-    tabBarPosition: 'bottom',
+    navigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === 'Journal') iconName = 'book-open';
+        else if (routeName === 'Photos') iconName = 'picture';
+        else if (routeName === 'Settings') iconName = 'settings';
+
+        return <SimpleLineIcons name={iconName} size={24} color={tintColor} />;
+      }
+    }),
     tabBarOptions: {
       activeTintColor: 'deepskyblue',
-      inactiveTintColor: '#929292',
-      style: {
-        backgroundColor: '#f4f4f4' // Hintergrundfarbe der Tableiste
-      },
-      indicatorStyle: {
-        height: 0 // Kein Strich am unteren Rand in Android
-      },
-      showIcon: true,
-      upperCaseLabel: false,
-      labelStyle: {
-        // nur Android: kein Abstand nach unten
-        ...Platform.select({ android: { marginBottom: 0 } })
-      }
-    },
-    swipeEnabled: false
+      inactiveTintColor: '#929292'
+    }
   }
 );
 
 const AppNavigator = createStackNavigator(
   {
-    Root: {
+    Home: {
       screen: Tabs,
       navigationOptions: ({ navigation }) => ({
         headerRight: (
@@ -90,12 +78,8 @@ const AppNavigator = createStackNavigator(
         )
       })
     },
-    Item: {
-      screen: ItemScreen
-    },
-    Edit: {
-      screen: EditScreen
-    }
+    Item: ItemScreen,
+    Edit: EditScreen
   },
   {
     navigationOptions: {

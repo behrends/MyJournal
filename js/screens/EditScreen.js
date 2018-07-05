@@ -7,7 +7,7 @@ import { ImagePicker, Location, Permissions } from 'expo';
 import TouchableItem from '../components/TouchableItem';
 
 export default class EditScreen extends Component {
-  state = { item: this.props.navigation.state.params.item };
+  state = { item: this.props.navigation.getParam('item') };
 
   _getWeather = async item => {
     try {
@@ -30,9 +30,7 @@ export default class EditScreen extends Component {
       const weatherJSON = await response.json();
       const { weather, main, name } = weatherJSON;
       item.location = name;
-      item.weather = `${Math.floor(main.temp)}˚C ${
-        weather[0].description
-      }`;
+      item.weather = `${Math.floor(main.temp)}˚C ${weather[0].description}`;
       this.setState({ item: item });
     } catch (error) {
       console.log('Error fetching weather', error);

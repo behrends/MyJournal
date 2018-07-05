@@ -12,12 +12,12 @@ import TouchableItem from '../components/TouchableItem';
 
 export default class ItemScreen extends Component {
   static navigationOptions = ({ navigation }) => {
-    const { navigate, state } = navigation;
     return {
       headerRight: (
         <TouchableItem
           onPress={() =>
-            navigation.navigate('Edit', { item: state.params.item })}
+            navigation.navigate('Edit', { item: navigation.getParam('item') })
+          }
         >
           <View>
             <Text style={styles.headerAction}>Bearbeiten</Text>
@@ -28,7 +28,7 @@ export default class ItemScreen extends Component {
   };
   render() {
     // item wird durch navigate() an diesen Screen geliefert
-    const item = this.props.navigation.state.params.item;
+    const item = this.props.navigation.getParam('item');
     const photo = item.photo ? (
       <Image
         style={styles.photo}
