@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
 import {
+  createAppContainer,
   createBottomTabNavigator,
   createStackNavigator
 } from 'react-navigation';
@@ -36,7 +37,7 @@ const Tabs = createBottomTabNavigator(
     }
   },
   {
-    navigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ tintColor }) => {
         const { routeName } = navigation.state;
         let iconName;
@@ -44,7 +45,9 @@ const Tabs = createBottomTabNavigator(
         else if (routeName === 'Photos') iconName = 'picture';
         else if (routeName === 'Settings') iconName = 'settings';
 
-        return <SimpleLineIcons name={iconName} size={24} color={tintColor} />;
+        return (
+          <SimpleLineIcons name={iconName} size={24} color={tintColor} />
+        );
       }
     }),
     tabBarOptions: {
@@ -82,7 +85,7 @@ const AppNavigator = createStackNavigator(
     Edit: EditScreen
   },
   {
-    navigationOptions: {
+    defaultNavigationOptions: {
       headerTintColor: 'deepskyblue',
       headerStyle: {
         ...Platform.select({
@@ -96,4 +99,4 @@ const AppNavigator = createStackNavigator(
   }
 );
 
-export default AppNavigator;
+export default createAppContainer(AppNavigator);
