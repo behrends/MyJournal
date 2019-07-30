@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Image, StyleSheet, TextInput, View } from 'react-native';
 
 import { SimpleLineIcons } from '@expo/vector-icons';
-import { ImagePicker, Location, Permissions } from 'expo';
+import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
 
 import TouchableItem from '../components/TouchableItem';
 
@@ -30,7 +32,9 @@ export default class EditScreen extends Component {
       const weatherJSON = await response.json();
       const { weather, main, name } = weatherJSON;
       item.location = name;
-      item.weather = `${Math.floor(main.temp)}˚C ${weather[0].description}`;
+      item.weather = `${Math.floor(main.temp)}˚C ${
+        weather[0].description
+      }`;
       this.setState({ item: item });
     } catch (error) {
       console.log('Error fetching weather', error);
